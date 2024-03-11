@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sound Level Graph</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+
+<div id="graph"></div>
+
+<script>
+function fetchData() {
+    fetch('/data')
+        .then(response => response.json())
+        .then(data => {
+            var timestamps = data.map(entry => entry.timestamp);
+            var levels = data.map(entry => entry.level);
+
+            var trace = {
+                x: timestamps,
+                y: levels,
+                type: 'scatter'
+            };
+
+            var layout = {
+                title: 'Sound Levels Over Time',
+                xaxis: {title: 'Time'},
+                yaxis: {title: 'Sound Level (dB)'}
+            };
+
+            Plotly.newPlot('graph', [trace], layout);
+        });
+}
+
+// Fetch data every 10 seconds to update the graph
+setInterval(fetchData, 10000);
+fetchData(); // Initial fetch
+</script>
+
+</body>
+</html>
