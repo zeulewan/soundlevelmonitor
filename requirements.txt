@@ -1,6 +1,4 @@
 sounddevice
 numpy
-csv
-time
 datetime
 Flask
