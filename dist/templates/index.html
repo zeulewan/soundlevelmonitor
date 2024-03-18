@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sound Level Graph</title>
+    <!-- Include the Plotly.js library from its CDN for plotting the sound level graph and pie chart -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+
+<!-- Div element where the scatter graph will be rendered -->
+<div id="graph"></div>
+<!-- Div element where the pie chart will be rendered -->
+<div id="piechart"></div>
+
+<script>
+// Define a function to fetch data from the '/data' endpoint
+function fetchData() {
+    // Make a request to the server at the '/data' route
+    fetch('/data')
+        .then(response => response.json()) // Parse the JSON returned from the server
+        .then(data => {
+            // Extract the timestamps and levels for the scatter plot
+            var timestamps = data.map(entry => entry.timestamp);
+            var levels = data.map(entry => entry.level);
+
+            // Define the data trace for the scatter plot
+            var traceScatter = {
+                x: timestamps, // X-axis data (timestamps)
+                y: levels,     // Y-axis data (sound levels)
+                type: 'scatter' // Type of plot
+            };
+
+            // Define the layout of the scatter plot with titles for the graph and axes
+            var layoutScatter = {
+                title: 'Sound Levels Over Time',
+                xaxis: {title: 'Time'},
+                yaxis: {title: 'Sound Level (dB)'}
+            };
+
+            // Render the scatter plot using Plotly in the 'graph' div
+            Plotly.newPlot('graph', [traceScatter], layoutScatter);
+
+            // Process data for the pie chart
+            var counts = [0, 0, 0]; // Initialize counters for the three dB ranges
+            levels.forEach(function(level) {
+                if (level < -50) counts[0] += 1; // Count levels in the range (-100, -50)
+                else if (level < -20) counts[1] += 1; // Count levels in the range (-50, -20)
+                else counts[2] += 1; // Count levels in the range (-20, 0)
+            });
+
+            // Define the data trace for the pie chart
+            var tracePie = {
+                values: counts,
+                labels: ['Quiet: -100 to -50 dB', 'Medium -50 to -20 dB', 'Loud-20 to 0 dB'],
+                type: 'pie'
+            };
+
+            // Define the layout of the pie chart with a title
+            var layoutPie = {
+                title: 'Sound Level Ranges',
+            };
+
+            // Render the pie chart using Plotly in the 'piechart' div
+            Plotly.newPlot('piechart', [tracePie], layoutPie);
+        });
+}
+
+// Set an interval to fetch data every 10 seconds and update the graphs accordingly
+setInterval(fetchData, 10000);
+// Call fetchData initially to populate the graphs as soon as the page loads
+fetchData();
+</script>
+
+</body>
+</html>

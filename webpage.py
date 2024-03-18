@@ -25,5 +25,5 @@ def data():
                 continue  # Skip rows with conversion errors
     return jsonify(data)
 
-if __name__ == "__main__":
-    app.run(debug=True)
+def run_server(debug=False, use_reloader=False):
+    app.run(debug=debug, use_reloader=use_reloader)
