@@ -16,3 +16,9 @@ Things that still need to be done:
 - Take average of data points
 - Only show data points since script was last run
 - Use google API to save data to google sheets
+- make it not open up the terminal
+
+## Use this to compile it:
+```
+pyinstaller --onefile --add-data "templates:templates" " runboth.py
+```
