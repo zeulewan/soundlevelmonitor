@@ -36,6 +36,6 @@ def main():
             print(f"Time: {timestamp}, Sound Level: {level} dB")
             save_to_csv([timestamp, level])
             
-            time.sleep(2)  # Adjusted for demonstration
+            time.sleep(600)  # Adjusted for demonstration
     except KeyboardInterrupt:
         print("Measurement stopped by user.")
